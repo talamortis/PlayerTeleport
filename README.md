@@ -1,2 +1,18 @@
 # PlayerMallTeleport
 Module for Azerothcore to teleport players to a mall with a command
+
+# How to use
+Install the SQL file to the character database on a GM account make two teleport locations with command :
+
+.tele add 
+
+two locations need to be added for this module to work.
+
+1. VIPMall
+2. PlayerMall
+
+once that is complete go to the VIP table in the character database
+
+add the accountid of the player account and also set it to active = 1
+
+if the accountid is not active the VIP mall would not work for the current account.
