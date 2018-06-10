@@ -1,4 +1,4 @@
-#include "Configuration/Config.h"
+﻿#include "Configuration/Config.h"
 #include "Player.h"
 #include "Creature.h"
 #include "AccountMgr.h"
@@ -23,7 +23,7 @@ public:
             Field* fields = result->Fetch();
             enabled = true;
         }
-        ChatHandler(p->GetSession()).SendSysMessage("This server is running the |cff4CFF00MallTeleportModule |rmodule");
+        ChatHandler(p->GetSession()).SendSysMessage("This server is running the |cff4CFF00TeleportModule |rmodule");
     }
 };
 
@@ -37,10 +37,51 @@ public:
         static std::vector<ChatCommand> MallTeleportTable =
         {
             { "Mall", SEC_PLAYER, false, &HandleMallTeleportCommand, "" },
-            {"vipMall", SEC_PLAYER, false, &HandleVIPMallTeleportCommand, ""}
+            { "vipMall", SEC_PLAYER, false, &HandleVIPMallTeleportCommand, ""},
+            { "playertele", SEC_PLAYER, false, &HandlePlayerTelePortCommand, ""}
 
         };
         return MallTeleportTable;
+    }
+
+    static bool HandlePlayerTelePortCommand(ChatHandler* handler, char const* args)
+    {
+        Player* me = handler->GetSession()->GetPlayer();
+        QueryResult result = WorldDatabase.PQuery("SELECT `map`, `position_x`, `position_y`, `position_z`, `orientation`, `security` FROM game_tele WHERE name = '%s'", args);
+
+        if (!me)
+            return false;
+
+        if (me->IsInCombat())
+            return false;
+
+        if (!result)
+            return false;
+
+        if (me->GetSession()->GetSecurity() > SEC_PLAYER)
+        {
+            handler->PSendSysMessage("This command is not available to you please use tele command");
+            return false;
+        }
+
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 map = fields[0].GetUInt32();
+            float position_x = fields[1].GetFloat();
+            float position_y = fields[2].GetFloat();
+            float position_z = fields[3].GetFloat();
+            float orientation = fields[4].GetFloat();
+            uint32 security = fields[5].GetInt32();
+
+            //Only players can use this command so if security = 1 return false;
+            if (security == 1)
+                return false;
+
+            me->TeleportTo(map, position_x, position_y, position_z, orientation);
+
+        } while (result->NextRow());
+
     }
 
     static bool HandleMallTeleportCommand(ChatHandler* handler, char const* args)
