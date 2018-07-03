@@ -16,3 +16,6 @@ once that is complete go to the VIP table in the character database
 add the accountid of the player account and also set it to active = 1
 
 if the accountid is not active the VIP mall would not work for the current account.
+
+# Show your appreciation
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SBJFTAJKUNEXC)
