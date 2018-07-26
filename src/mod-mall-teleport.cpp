@@ -1,4 +1,4 @@
-﻿#include "Configuration/Config.h"
+#include "Configuration/Config.h"
 #include "Player.h"
 #include "Creature.h"
 #include "AccountMgr.h"
@@ -81,7 +81,7 @@ public:
             me->TeleportTo(map, position_x, position_y, position_z, orientation);
 
         } while (result->NextRow());
-
+        return true;
     }
 
     static bool HandleMallTeleportCommand(ChatHandler* handler, char const* args)
@@ -109,6 +109,7 @@ public:
 
             me->TeleportTo(map, position_x, position_y, position_z, orientation);
         } while (result->NextRow());
+        return true;
     }
 
     static bool HandleVIPMallTeleportCommand(ChatHandler* handler, char const* args)
@@ -138,6 +139,7 @@ public:
             p->TeleportTo(map, position_x, position_y, position_z, orientation);
         } while (result->NextRow());
 
+        return true;
     }
 };
 
