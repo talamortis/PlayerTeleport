@@ -18,11 +18,10 @@ public:
     {
         QueryResult result = CharacterDatabase.PQuery("SELECT AccountId FROM premium WHERE active = 1 AND AccountId = %u", p->GetSession()->GetAccountId());
 
-        if (result)
-        {
-            Field* fields = result->Fetch();
+        if (result) {
             enabled = true;
         }
+
         ChatHandler(p->GetSession()).SendSysMessage("This server is running the |cff4CFF00MallTeleportModule |rmodule");
     }
 };
@@ -43,7 +42,7 @@ public:
         return MallTeleportTable;
     }
 
-    static bool HandleMallTeleportCommand(ChatHandler* handler, char const* args)
+    static bool HandleMallTeleportCommand(ChatHandler* handler, char const* /* args */)
     {
         Player* me = handler->GetSession()->GetPlayer();
         QueryResult result = WorldDatabase.PQuery("SELECT `map`, `position_x`, `position_y`, `position_z`, `orientation` FROM game_tele WHERE name = 'PlayerMall'");
@@ -68,9 +67,11 @@ public:
 
             me->TeleportTo(map, position_x, position_y, position_z, orientation);
         } while (result->NextRow());
+
+        return true;
     }
 
-    static bool HandleVIPMallTeleportCommand(ChatHandler* handler, char const* args)
+    static bool HandleVIPMallTeleportCommand(ChatHandler* handler, char const* /* args */)
     {
         QueryResult result = WorldDatabase.PQuery("SELECT `map`, `position_x`, `position_y`, `position_z`, `orientation` FROM game_tele WHERE name = 'VIPMall'");
         Player* p = handler->GetSession()->GetPlayer();
@@ -84,7 +85,7 @@ public:
         if (!enabled)
             p->GetSession()->SendNotification("You do not have access to this command");
             return false;
-            
+
         do
         {
             Field* fields = result->Fetch();
